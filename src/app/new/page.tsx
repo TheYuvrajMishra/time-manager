@@ -79,7 +79,7 @@ export default function NewPage() {
         {/* Action Buttons */}
         <div className="flex justify-end space-x-4">
           <button
-            onClick={() => router.push('/')}
+            onClick={() => router.push('/Home')}
             className="px-4 py-2 rounded-lg text-sm text-gray-400 hover:text-white hover:underline"
           >
             Cancel

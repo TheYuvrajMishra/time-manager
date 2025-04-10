@@ -57,25 +57,24 @@ export default function HomePage() {
   const handleAddNewPage = () => {
     router.push('/new');
   };
-
   return (
     <div className="flex min-h-screen bg-[#1e1e1e] text-white ml-[20%]">
       <main className="flex-1 p-10">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-bold">Good evening, Yuvraj Mishra</h1>
+          <h1 className="text-4xl font-bold underline">Good Evening, Yuvraj Mishra</h1>
         </div>
 
         {/* Recently Visited */}
         <div>
-          <h2 className="text-lg font-semibold mb-3">🧠 Recently Visited</h2>
+          <h2 className="text-lg font-semibold mb-3">Recently Visited:</h2>
           {recentlyVisited.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
               {recentlyVisited.map((item, i) => (
                 <div
                   key={i}
                   onClick={() => handleCardClick(item.title)}
-                  className="bg-[#2c2c2c] p-4 rounded-lg shadow hover:shadow-lg cursor-pointer transition"
+                  className="bg-[#2c2c2c] p-4 hover:bg-[#3c3c3c] rounded-lg shadow hover:shadow-xl cursor-pointer transition duration-300"
                 >
                   <div className="font-semibold">{item.title}</div>
                   <div className="text-xs text-gray-400 mt-1">{item.date}</div>
@@ -88,7 +87,7 @@ export default function HomePage() {
         </div>
 
         {/* Welcome Box */}
-        <div
+        {/* <div
           onClick={() => handleCardClick("Welcome Page")}
           className="bg-[#2c2c2c] p-6 rounded-lg shadow-md max-w-2xl cursor-pointer hover:shadow-lg transition"
         >
@@ -99,7 +98,7 @@ export default function HomePage() {
             This is your first page. You can create documents, take notes,
             organize tasks, and more. Click to start editing.
           </p>
-        </div>
+        </div> */}
 
         {/* Add New Page */}
         <div

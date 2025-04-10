@@ -107,7 +107,7 @@ export default function Search() {
                   setQuery('');
                   inputRef.current?.focus();
                 }}
-                className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-400 hover:text-white focus:outline-none focus:ring-1 focus:ring-white rounded-full"
+                className="absolute top-1/2 right-3 transform -translate-y-1/2 text-white  hover:text-white focus:outline-none focus:ring-1 focus:ring-white rounded-full"
                 aria-label="Clear"
               >
                 <X size={16} />
@@ -121,7 +121,7 @@ export default function Search() {
               {filteredSuggestions.map((suggestion, index) => (
                 <li
                   key={index}
-                  className={`px-4 py-2 rounded cursor-pointer ${
+                  className={`px-4 py-2 rounded cursor-pointer text-gray-500 ${
                     index === activeIndex ? 'bg-blue-600 text-white' : 'hover:bg-gray-700'
                   }`}
                   onClick={() =>
