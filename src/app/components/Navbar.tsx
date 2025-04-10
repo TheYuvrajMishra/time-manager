@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import React from "react";
 
 export default function Home() {
+  
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -27,6 +28,9 @@ export default function Home() {
 
   const handleSearch = () => {
     router.push("/Search");
+  };
+  const handleSettings = () => {
+    router.push("/Settings");
   };
 
   type PageItem = {
@@ -56,16 +60,28 @@ export default function Home() {
       localStorage.setItem(
         "page-Welcome Page",
         `
-        <h2 style="font-size: 40px; font-weight: bold; color: #4ade80;">Welcome to Time-Manager</h2>
-        <p style="font-size: 18px; margin-top: 10px; text-decoration:underline;">
-          We are <strong>excited</strong> to help you take control of your time and <em>boost your productivity</em>.
+        <h2 style="font-size: 40px; font-weight: bold; color: #4ade80; margin-bottom: 16px;">
+          👋 Welcome to <span style="color:#22d3ee;">Time-Manager</span>
+        </h2>
+      
+        <p style="font-size: 18px; margin-bottom: 12px; text-decoration: underline;">
+          We're <strong style="color: #facc15;">excited</strong> to help you take control of your time and 
+          <em style="color: #fb7185;">boost your productivity</em>.
         </p>
-        <p style="font-size: 18px; margin-top: 10px;">
-          Whether you're managing <u>daily tasks</u> or planning <u>long-term goals</u>, we have the tools you need to stay 
-          <span style="color: #60a5fa;">organized</span> and <span style="color: #f87171;">stress-free</span>.
+      
+        <p style="font-size: 18px; margin-bottom: 12px;">
+          Whether you're managing <u>daily tasks</u> or planning <u>long-term goals</u>, we’ve got your back with tools that keep you 
+          <span style="color: #60a5fa;">organized</span> and 
+          <span style="color: #f87171;">stress-free</span>.
         </p>
-        <p style="font-size: 18px; margin-top: 10px;">
-          <strong>Let's make every minute count.</strong> ⏳
+      
+        <p style="font-size: 18px; margin-bottom: 12px;">
+          From schedules to progress tracking—<strong style="color: #34d399;">it’s all here</strong>.
+        </p>
+      
+        <p style="font-size: 18px; margin-top: 20px; border-left: 4px solid #4ade80; padding-left: 12px; color: #d4d4d4;">
+          ⏳ <strong>Let's make every minute count.</strong><br>
+          Start organizing your day the smart way. 🚀
         </p>
         `
       );
@@ -98,11 +114,10 @@ export default function Home() {
               </div>
               <div
                 className="text-sm truncate max-w-[140px]"
-                title="yuvrajmishra@gmail.com"
               >
-                yuvrajmishra@gmail.com
+                Yuvraj Mishra
               </div>
-              <RiArrowDropDownLine className="text-2xl cursor-pointer" />
+              {/* <RiArrowDropDownLine className="text-2xl cursor-pointer" /> */}
             </div>
           </div>
 
@@ -115,7 +130,7 @@ export default function Home() {
               <CiSearch className="text-xl" />
               <span>Search</span>
             </li>
-            <li className="flex items-center w-full gap-3 py-1 px-4 rounded-lg hover:bg-[#2C2C2C] hover:text-[#D5D5D5] cursor-pointer">
+            <li className="flex items-center w-full gap-3 py-1 px-4 rounded-lg opacity-50 pointer-none pointer-events-none">
               <GiArtificialHive className="text-xl" />
               <span>AI</span>
             </li>
@@ -137,60 +152,60 @@ export default function Home() {
 
           {/* Private Documents */}
           <>
-            <p className="flex items-center text-xs w-full space-x-2 py-2 mt-6 px-4 rounded-lg hover:text-[#8E8E8E] text-[#7D7D7D] cursor-default">
-              <span className="tracking-wide">Private</span>
-            </p>
+  <p className="flex items-center text-xs w-full space-x-2 py-2 mt-6 px-4 rounded-lg hover:text-[#8E8E8E] text-[#7D7D7D] cursor-default">
+    <span className="tracking-wide">Private</span>
+  </p>
 
-            <div
-              className="custom-scrollbar max-h-[calc(100vh-350px)] overflow-y-auto"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "#414141 transparent",
-              }}
-            >
-              <ul className="flex flex-col items-start space-y-1 mx-2 text-sm">
-                {recentlyVisited.map((item, i) => (
-                  <div
-                    key={i}
-                    className="group flex items-center w-full gap-3 py-1 px-4 rounded-lg hover:bg-[#2C2C2C] hover:text-[#D5D5D5] cursor-pointer"
-                  >
-                    <IoDocumentTextOutline
-                      onClick={() => handleCardClick(item.title)}
-                    />
-                    <div
-                      onClick={() => handleCardClick(item.title)}
-                      className="flex items-center justify-between py-0.5 w-full"
-                    >
-                      <span className="truncate max-w-[65%]">{item.title}</span>
-                      <span className="text-[12px] text-[#7D7D7D] whitespace-nowrap">
-                        {item.date}
-                      </span>
-                    </div>
-                    <div
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setAnchorEl(e.currentTarget);
-                        setSelectedItem(item);
-                      }}
-                    >
-                      <PiDotsThree className="text-2xl translate-x-full opacity-0 group-hover:translate-x-0 group-hover:opacity-100 text-[#d5d5d5] hover:text-[#D5D5D5] transition-all duration-200" />
-                    </div>
-                  </div>
-                ))}
-              </ul>
-            </div>
-          </>
+  <div
+    className="custom-scrollbar max-h-[calc(100vh-350px)] max-w-120 overflow-y-auto overflow-x-hidden"
+    style={{
+      scrollbarWidth: "thin",
+      scrollbarColor: "#414141 transparent",
+    }}
+  >
+    <ul className="flex flex-col items-start space-y-1 mx-2 text-sm">
+      {recentlyVisited.map((item, i) => (
+        <div
+          key={i}
+          className="group flex items-center w-full gap-3 py-1 px-4 rounded-lg hover:bg-[#2C2C2C] hover:text-[#D5D5D5] cursor-pointer"
+        >
+          <IoDocumentTextOutline
+            className="flex-shrink-0"
+            onClick={() => handleCardClick(item.title)}
+          />
+
+          <div
+            onClick={() => handleCardClick(item.title)}
+            className="flex justify-between items-center w-full gap-2 overflow-hidden"
+          >
+            <span className="truncate text-sm max-w-[60%]">{item.title}</span>
+            <span className="text-[12px] text-[#7D7D7D] translate-x-full group-hover:translate-x-0 transition-all ease duration-200 whitespace-nowrap">
+              {item.date}
+            </span>
+          </div>
+
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              setAnchorEl(e.currentTarget);
+              setSelectedItem(item);
+            }}
+          >
+            <PiDotsThree className="text-2xl translate-x-full opacity-0 group-hover:translate-x-0 group-hover:opacity-100 text-[#d5d5d5] hover:text-[#D5D5D5] transition-all duration-200" />
+          </div>
+        </div>
+      ))}
+    </ul>
+  </div>
+</>
+
         </div>
 
         {/* Bottom Settings */}
-        <ul className="flex flex-col items-start space-y-1 mx-2 mt-6 text-sm mb-4">
+        <ul onClick={handleSettings} className="flex flex-col items-start space-y-1 mx-2 mt-6 text-sm mb-4">
           <li className="flex items-center w-full gap-3 py-1 px-4 rounded-lg hover:bg-[#2C2C2C] hover:text-[#D5D5D5] cursor-pointer">
             <CiSettings className="text-xl" />
             <span>Settings</span>
-          </li>
-          <li className="flex items-center w-full gap-3 py-1 px-4 rounded-lg hover:bg-[#2C2C2C] hover:text-[#D5D5D5] cursor-pointer">
-            <CiTrash className="text-xl" />
-            <span>Trash</span>
           </li>
         </ul>
       </div>

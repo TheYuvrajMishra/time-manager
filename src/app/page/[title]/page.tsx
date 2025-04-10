@@ -1,27 +1,83 @@
-'use client';
+"use client";
 
-import { useParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import {
   Bold,
   Italic,
   Underline,
   Highlighter,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  AlignJustify,
+  List,
+  ListOrdered,
+  Heading,
   Table2,
   StickyNote,
   ImagePlus,
+  Undo2,
+  Redo2,
+  FileDown,
+  FileText,
+  Sun,
+  Moon,
   Trash2,
-  Type
-} from 'lucide-react';
+} from "lucide-react";
 
 export default function PageView() {
+  const handleClear = () => {
+    if (confirm("Are you sure you want to clear all content on this page?")) {
+      if (editorRef.current) {
+        editorRef.current.innerHTML = "";
+        setContent("");
+        localStorage.removeItem(`page-${title}`);
+      }
+    }
+  };
+
   const params = useParams();
   const title = decodeURIComponent(params.title as string);
   const editorRef = useRef<HTMLDivElement>(null);
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState("");
 
   useEffect(() => {
-    const stored = localStorage.getItem(`page-${title}`);
+    const key = `page-${title}`;
+    const stored = localStorage.getItem(key);
+
+    // If no previous content exists for this page, insert the default welcome message
+    if (!stored && title === "Welcome Page") {
+      const welcomeMessage = `
+        <h2 style="font-size: 40px; font-weight: bold; color: #4ade80; margin-bottom: 16px;">
+          👋 Welcome to <span style="color:#22d3ee;">Time-Manager</span>
+        </h2>
+  
+        <p style="font-size: 18px; margin-bottom: 12px; text-decoration: underline;">
+          We're <strong style="color: #facc15;">excited</strong> to help you take control of your time and 
+          <em style="color: #fb7185;">boost your productivity</em>.
+        </p>
+  
+        <p style="font-size: 18px; margin-bottom: 12px;">
+          Whether you're managing <u>daily tasks</u> or planning <u>long-term goals</u>, we’ve got your back with tools that keep you 
+          <span style="color: #60a5fa;">organized</span> and 
+          <span style="color: #f87171;">stress-free</span>.
+        </p>
+  
+        <p style="font-size: 18px; margin-bottom: 12px;">
+          From schedules to progress tracking—<strong style="color: #34d399;">it’s all here</strong>.
+        </p>
+  
+        <p style="font-size: 18px; margin-top: 20px; border-left: 4px solid #4ade80; padding-left: 12px; color: #d4d4d4;">
+          ⏳ <strong>Let's make every minute count.</strong><br>
+          Start organizing your day the smart way. 🚀
+        </p>
+      `;
+      localStorage.setItem(key, welcomeMessage);
+      editorRef.current!.innerHTML = welcomeMessage;
+      setContent(welcomeMessage);
+    }
+
     if (stored && editorRef.current) {
       editorRef.current.innerHTML = stored;
       setContent(stored);
@@ -43,15 +99,24 @@ export default function PageView() {
 
   const insertTable = () => {
     const tableHTML = `
-      <table border="1" style="border-collapse: collapse; width: 100%;">
-        <tr><th>Header 1</th><th>Header 2</th></tr>
-        <tr><td>Row 1</td><td>Row 1</td></tr>
-        <tr><td>Row 2</td><td>Row 2</td></tr>
+      <table data-theme="dark" style="border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 16px;">
+        <thead>
+          <tr style="background-color: #374151; color: white;">
+            <th style="padding: 12px; border: 1px solid #4b5563;">Header 1</th>
+            <th style="padding: 12px; border: 1px solid #4b5563;">Header 2</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background-color: #1f2937; color: white;">
+            <td style="padding: 12px; border: 1px solid #4b5563;">Row 1</td>
+            <td style="padding: 12px; border: 1px solid #4b5563;">Row 1</td>
+          </tr>
+        </tbody>
       </table><br/>
     `;
     if (editorRef.current) {
       editorRef.current.focus();
-      document.execCommand('insertHTML', false, tableHTML);
+      document.execCommand("insertHTML", false, tableHTML);
       saveContent();
     }
   };
@@ -59,88 +124,186 @@ export default function PageView() {
   const insertStickyNote = () => {
     const noteHTML = `
       <div style="background-color: #fff3cd; color: #856404; padding: 10px; margin: 10px 0; border-left: 5px solid #ffecb5;">
-        📝 Sticky Note: Write something here...
+        📝
       </div>
     `;
-    document.execCommand('insertHTML', false, noteHTML);
+    document.execCommand("insertHTML", false, noteHTML);
     saveContent();
   };
 
   const highlightText = () => {
-    execCommand('backColor', 'yellow');
+    execCommand("backColor", "yellow");
+    execCommand("foreColor", "black");
   };
 
   const insertImage = () => {
-    const url = prompt('Enter image URL');
+    const url = prompt("Enter image URL");
     if (url) {
       const imageHTML = `<img src="${url}" alt="Image" style="max-width: 100%; height: auto;" /><br/>`;
-      document.execCommand('insertHTML', false, imageHTML);
+      document.execCommand("insertHTML", false, imageHTML);
       saveContent();
     }
   };
-
+  const [trashedPages, setTrashedPages] = useState<any[]>([]);
+  const [showTrash, setShowTrash] = useState(false);
+  
+  useEffect(() => {
+    const storedTrash = localStorage.getItem("trashedPages");
+    if (storedTrash) {
+      setTrashedPages(JSON.parse(storedTrash));
+    }
+  }, []);
+  
   const handleDelete = () => {
-    if (confirm('Are you sure you want to delete this page?')) {
-      localStorage.removeItem(`page-${title}`);
-      const stored = localStorage.getItem('recentPages');
+    if (confirm("Are you sure you want to move this page to trash?")) {
+      const key = `page-${title}`;
+      const storedPage = localStorage.getItem(key);
+      if (storedPage) {
+        const updatedTrash = [...trashedPages, { title, content: storedPage, date: new Date().toLocaleString() }];
+        localStorage.setItem("trashedPages", JSON.stringify(updatedTrash));
+        setTrashedPages(updatedTrash);
+      }
+  
+      localStorage.removeItem(key);
+  
+      const stored = localStorage.getItem("recentPages");
       if (stored) {
         const recent = JSON.parse(stored).filter((p: any) => p.title !== title);
-        localStorage.setItem('recentPages', JSON.stringify(recent));
+        localStorage.setItem("recentPages", JSON.stringify(recent));
       }
-      window.location.href = '/Home';
+      window.location.href = "/Home";
     }
   };
+  
 
   return (
     <div className="min-h-screen bg-[#1e1e1e] ml-[20%] text-white p-10 space-y-6">
-      <div className="flex items-center justify-between border-b border-gray-700 pb-4">
+      {/* Header */}
+      <div className="flex items-center justify-between border-b border-gray-700 pb-6">
         <h1 className="text-4xl font-semibold tracking-tight">{title}</h1>
-        <button
-          onClick={handleDelete}
-          className="flex items-center gap-1 text-sm text-red-400 hover:text-red-300 hover:underline transition duration-200"
-        >
-          <Trash2 className="w-4 h-4" />
-          Delete Page
-        </button>
       </div>
 
       {/* Toolbar */}
-      <div className="flex flex-wrap gap-2 pb-4 border-b border-gray-700">
-        <button onClick={() => execCommand('bold')} className="px-3 py-2 bg-gray-800 rounded hover:bg-gray-700 flex items-center gap-1">
-          <Bold className="w-4 h-4" /> Bold
-        </button>
-        <button onClick={() => execCommand('italic')} className="px-3 py-2 bg-gray-800 rounded hover:bg-gray-700 flex items-center gap-1">
-          <Italic className="w-4 h-4" /> Italic
-        </button>
-        <button onClick={() => execCommand('underline')} className="px-3 py-2 bg-gray-800 rounded hover:bg-gray-700 flex items-center gap-1">
-          <Underline className="w-4 h-4" /> Underline
-        </button>
-        <button onClick={highlightText} className="px-3 py-2 bg-gray-800 rounded hover:bg-gray-700 flex items-center gap-1">
-          <Highlighter className="w-4 h-4" /> Highlight
-        </button>
+      <div className="flex flex-wrap gap-3 p-4 bg-[#2a2a2a] border border-gray-700 rounded-xl">
+        {/* Formatting */}
+        <div className="flex gap-2 border-r pr-4 border-gray-600">
+          <button
+            onClick={() => execCommand("bold")}
+            className="toolbar-btn"
+            title="Bold"
+          >
+            <Bold className="w-5 h-5" />
+          </button>
+          <button
+            onClick={() => execCommand("italic")}
+            className="toolbar-btn"
+            title="Italic"
+          >
+            <Italic className="w-5 h-5" />
+          </button>
+          <button
+            onClick={() => execCommand("underline")}
+            className="toolbar-btn"
+            title="Underline"
+          >
+            <Underline className="w-5 h-5" />
+          </button>
+          <button
+            onClick={highlightText}
+            className="toolbar-btn"
+            title="Highlight"
+          >
+            <Highlighter className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Alignment */}
+        <div className="flex gap-2 border-r pr-4 border-gray-600">
+          <button
+            onClick={() => execCommand("justifyLeft")}
+            className="toolbar-btn"
+            title="Align Left"
+          >
+            <AlignLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={() => execCommand("justifyCenter")}
+            className="toolbar-btn"
+            title="Align Center"
+          >
+            <AlignCenter className="w-5 h-5" />
+          </button>
+          <button
+            onClick={() => execCommand("justifyRight")}
+            className="toolbar-btn"
+            title="Align Right"
+          >
+            <AlignRight className="w-5 h-5" />
+          </button>
+          <button
+            onClick={() => execCommand("justifyFull")}
+            className="toolbar-btn"
+            title="Justify"
+          >
+            <AlignJustify className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Lists */}
+        {/* <div className="flex gap-2 border-r pr-4 border-gray-600">
+      <button onClick={() => execCommand('insertUnorderedList')} className="toolbar-btn" title="Bullet List"><List className="w-5 h-5" /></button>
+      <button onClick={() => execCommand('insertOrderedList')} className="toolbar-btn" title="Numbered List"><ListOrdered className="w-5 h-5" /></button>
+    </div> */}
+
+        {/* Headings */}
         <select
-          onChange={(e) => execCommand('fontSize', e.target.value)}
-          className="px-3 py-2 bg-gray-800 rounded text-white"
+          onChange={(e) => execCommand("formatBlock", e.target.value)}
+          className="toolbar-select"
+          title="Heading Style"
         >
-          <option value="3">Font Size</option>
-          <option value="1">Small</option>
-          <option value="3">Normal</option>
-          <option value="5">Large</option>
-          <option value="7">Huge</option>
+          <option value="div">Normal</option>
+          <option value="h1">H1</option>
+          <option value="h2">H2</option>
+          <option value="h3">H3</option>
+          <option value="blockquote">Quote</option>
         </select>
+
+        {/* Font size */}
+        <select
+          onChange={(e) => execCommand("fontSize", e.target.value)}
+          className="toolbar-select"
+          title="Font Size"
+        >
+          <option value="3">Size</option>
+          <option value="1">S</option>
+          <option value="3">M</option>
+          <option value="5">L</option>
+          <option value="7">XL</option>
+        </select>
+
+        {/* Font color */}
         <input
           type="color"
-          onChange={(e) => execCommand('foreColor', e.target.value)}
+          onChange={(e) => execCommand("foreColor", e.target.value)}
           className="w-10 h-10 bg-transparent border-none cursor-pointer"
+          title="Text Color"
         />
-        <button onClick={insertTable} className="px-3 py-2 bg-gray-800 rounded hover:bg-gray-700 flex items-center gap-1">
-          <Table2 className="w-4 h-4" /> Table
+
+        {/* Insert */}
+        <button
+          onClick={insertTable}
+          className="toolbar-btn"
+          title="Insert Table"
+        >
+          <Table2 className="w-5 h-5" />
         </button>
-        <button onClick={insertStickyNote} className="px-3 py-2 bg-gray-800 rounded hover:bg-gray-700 flex items-center gap-1">
-          <StickyNote className="w-4 h-4" /> Note
-        </button>
-        <button onClick={insertImage} className="px-3 py-2 bg-gray-800 rounded hover:bg-gray-700 flex items-center gap-1">
-          <ImagePlus className="w-4 h-4" /> Image
+        {/* <button onClick={insertStickyNote} className="toolbar-btn" title="Insert Note"><StickyNote className="w-5 h-5" /></button> */}
+        <button
+          onClick={insertImage}
+          className="toolbar-btn"
+          title="Insert Image"
+        >
+          <ImagePlus className="w-5 h-5" />
         </button>
       </div>
 
@@ -152,8 +315,31 @@ export default function PageView() {
         className="w-full h-[70vh] p-6 bg-[#2c2c2c] text-white border border-gray-700 rounded-xl overflow-y-auto focus:outline-none"
         suppressContentEditableWarning={true}
       >
-        {/* Editable Content */}
+        {/* Editable content goes here */}
       </div>
+
+      {/* Delete Button */}
+      <div className="pt-6 flex justify-end gap-4">
+  {/* Clear Button */}
+  <button
+    onClick={handleClear}
+    className="cursor-pointer inline-flex items-center gap-2 text-sm bg-yellow-500 hover:bg-yellow-400 text-black font-medium px-4 py-2 rounded transition duration-200"
+    title="Clear Page"
+  >
+    🧹 Clear
+  </button>
+
+  {/* Delete Button */}
+  <button
+    onClick={handleDelete}
+    className="cursor-pointer inline-flex items-center gap-2 text-sm bg-red-600 hover:bg-red-500 text-white font-medium px-4 py-2 rounded transition duration-200"
+    title="Delete Page"
+  >
+    <Trash2 className="w-4 h-4" />
+    Delete Page
+  </button>
+</div>
+
     </div>
   );
 }

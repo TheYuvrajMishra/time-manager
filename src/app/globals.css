@@ -13,3 +13,12 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: #52525b; /* subtle lighter gray on hover */
 }
+
+
+.toolbar-btn {
+  @apply p-2 bg-gray-800 rounded hover:bg-gray-700 flex items-center justify-center text-white;
+}
+
+.toolbar-select {
+  @apply px-2 py-1 bg-gray-800 rounded text-white text-sm;
+}
