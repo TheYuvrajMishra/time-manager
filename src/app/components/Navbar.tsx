@@ -35,6 +35,8 @@ export default function Home() {
   };
 
   const [recentlyVisited, setRecentlyVisited] = useState<PageItem[]>([]);
+  const [selectedItem, setSelectedItem] = useState<PageItem | null>(null);
+
 
   // Load pages from localStorage on mount
   useEffect(() => {
@@ -150,17 +152,27 @@ export default function Home() {
                 {recentlyVisited.map((item, i) => (
                   <div
                     key={i}
-                    onClick={() => handleCardClick(item.title)}
                     className="group flex items-center w-full gap-3 py-1 px-4 rounded-lg hover:bg-[#2C2C2C] hover:text-[#D5D5D5] cursor-pointer"
                   >
-                    <IoDocumentTextOutline />
-                    <div className="flex items-center justify-between py-0.5 w-full">
+                    <IoDocumentTextOutline
+                      onClick={() => handleCardClick(item.title)}
+                    />
+                    <div
+                      onClick={() => handleCardClick(item.title)}
+                      className="flex items-center justify-between py-0.5 w-full"
+                    >
                       <span className="truncate max-w-[65%]">{item.title}</span>
                       <span className="text-[12px] text-[#7D7D7D] whitespace-nowrap">
                         {item.date}
                       </span>
                     </div>
-                    <div onClick={handleClick}>
+                    <div
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setAnchorEl(e.currentTarget);
+                        setSelectedItem(item);
+                      }}
+                    >
                       <PiDotsThree className="text-2xl translate-x-full opacity-0 group-hover:translate-x-0 group-hover:opacity-100 text-[#d5d5d5] hover:text-[#D5D5D5] transition-all duration-200" />
                     </div>
                   </div>
@@ -183,47 +195,89 @@ export default function Home() {
         </ul>
       </div>
       <Menu
-        id="composition-menu"
-        aria-labelledby="composition-button"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        PaperProps={{
-          sx: {
-            backgroundColor: "#2C2C2C",
-            color: "#D5D5D5",
-            borderRadius: 2,
-            boxShadow: "0px 4px 10px rgba(0,0,0,0.3)",
-          },
-        }}
-      >
-        <MenuItem
-          onClick={handleClose}
-          sx={{ "&:hover": { backgroundColor: "#383838" } }}
+          id="composition-menu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={() => setAnchorEl(null)}
+          anchorOrigin={{ vertical: "top", horizontal: "left" }}
+          transformOrigin={{ vertical: "top", horizontal: "left" }}
+          PaperProps={{
+            sx: {
+              backgroundColor: "#2C2C2C",
+              color: "#D5D5D5",
+              borderRadius: 2,
+              boxShadow: "0px 4px 10px rgba(0,0,0,0.3)",
+            },
+          }}
         >
-          Open
-        </MenuItem>
-        <MenuItem
-          onClick={handleClose}
-          sx={{ "&:hover": { backgroundColor: "#383838" } }}
-        >
-          Rename
-        </MenuItem>
-        <MenuItem
-          onClick={handleClose}
-          sx={{ "&:hover": { backgroundColor: "#383838" } }}
-        >
-          Delete
-        </MenuItem>
-      </Menu>
+          <MenuItem
+            onClick={() => {
+              if (selectedItem) handleCardClick(selectedItem.title);
+              setAnchorEl(null);
+            }}
+            sx={{ "&:hover": { backgroundColor: "#383838" } }}
+          >
+            Open
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              if (selectedItem) {
+                const newName = prompt(
+                  "Rename to:",
+                  selectedItem.title
+                );
+                if (newName && newName.trim()) {
+                  const updated = recentlyVisited.map((item) =>
+                    item.title === selectedItem.title
+                      ? { ...item, title: newName.trim() }
+                      : item
+                  );
+                  setRecentlyVisited(updated);
+                  localStorage.setItem(
+                    "recentPages",
+                    JSON.stringify(updated)
+                  );
+
+                  const html = localStorage.getItem(
+                    `page-${selectedItem.title}`
+                  );
+                  if (html) {
+                    localStorage.removeItem(`page-${selectedItem.title}`);
+                    localStorage.setItem(`page-${newName}`, html);
+                  }
+                }
+              }
+              setAnchorEl(null);
+            }}
+            sx={{ "&:hover": { backgroundColor: "#383838" } }}
+          >
+            Rename
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              if (selectedItem) {
+                const confirmDelete = confirm(
+                  `Are you sure you want to delete "${selectedItem.title}"?`
+                );
+                if (confirmDelete) {
+                  const filtered = recentlyVisited.filter(
+                    (item) => item.title !== selectedItem.title
+                  );
+                  setRecentlyVisited(filtered);
+                  localStorage.setItem(
+                    "recentPages",
+                    JSON.stringify(filtered)
+                  );
+                  localStorage.removeItem(`page-${selectedItem.title}`);
+                }
+              }
+              setAnchorEl(null);
+            }}
+            sx={{ "&:hover": { backgroundColor: "#383838" } }}
+          >
+            Delete
+          </MenuItem>
+        </Menu>
     </div>
   );
 }
