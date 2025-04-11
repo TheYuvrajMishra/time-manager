@@ -12,9 +12,14 @@ import { PiDotsThree } from "react-icons/pi";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import React from "react";
+import SettingsModal from "@/app/Settings/page"; // adjust this path as needed
 
 export default function Home() {
-  
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  const handleSettings = () => {
+    setIsSettingsOpen(true);
+  };
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -29,9 +34,9 @@ export default function Home() {
   const handleSearch = () => {
     router.push("/Search");
   };
-  const handleSettings = () => {
-    router.push("/Settings");
-  };
+  // const handleSettings = () => {
+  //   router.push("/Settings");
+  // };
 
   type PageItem = {
     title: string;
@@ -40,7 +45,6 @@ export default function Home() {
 
   const [recentlyVisited, setRecentlyVisited] = useState<PageItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<PageItem | null>(null);
-
 
   // Load pages from localStorage on mount
   useEffect(() => {
@@ -112,9 +116,7 @@ export default function Home() {
               <div className="bg-[#353535] w-6 h-6 flex items-center justify-center mr-2 rounded-lg text-sm font-semibold">
                 Y
               </div>
-              <div
-                className="text-sm truncate max-w-[140px]"
-              >
+              <div className="text-sm truncate max-w-[140px]">
                 Yuvraj Mishra
               </div>
               {/* <RiArrowDropDownLine className="text-2xl cursor-pointer" /> */}
@@ -130,7 +132,9 @@ export default function Home() {
               <CiSearch className="text-xl" />
               <span>Search</span>
             </li>
-            <li className="flex items-center w-full gap-3 py-1 px-4 rounded-lg opacity-50 pointer-none pointer-events-none">
+            <li 
+            onClick={() => router.push("/AI")}
+            className="flex items-center w-full gap-3 py-1 px-4 rounded-lg hover:bg-[#2C2C2C] hover:text-[#D5D5D5] cursor-pointer">
               <GiArtificialHive className="text-xl" />
               <span>AI</span>
             </li>
@@ -152,147 +156,148 @@ export default function Home() {
 
           {/* Private Documents */}
           <>
-  <p className="flex items-center text-xs w-full space-x-2 py-2 mt-6 px-4 rounded-lg hover:text-[#8E8E8E] text-[#7D7D7D] cursor-default">
-    <span className="tracking-wide">Private</span>
-  </p>
+            <p className="flex items-center text-xs w-full space-x-2 py-2 mt-6 px-4 rounded-lg hover:text-[#8E8E8E] text-[#7D7D7D] cursor-default">
+              <span className="tracking-wide">Private</span>
+            </p>
 
-  <div
-    className="custom-scrollbar max-h-[calc(100vh-350px)] max-w-120 overflow-y-auto overflow-x-hidden"
-    style={{
-      scrollbarWidth: "thin",
-      scrollbarColor: "#414141 transparent",
-    }}
-  >
-    <ul className="flex flex-col items-start space-y-1 mx-2 text-sm">
-      {recentlyVisited.map((item, i) => (
-        <div
-          key={i}
-          className="group flex items-center w-full gap-3 py-1 px-4 rounded-lg hover:bg-[#2C2C2C] hover:text-[#D5D5D5] cursor-pointer"
-        >
-          <IoDocumentTextOutline
-            className="flex-shrink-0"
-            onClick={() => handleCardClick(item.title)}
-          />
+            <div
+              className="custom-scrollbar max-h-[calc(100vh-350px)] max-w-120 overflow-y-auto overflow-x-hidden"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "#414141 transparent",
+              }}
+            >
+              <ul className="flex flex-col items-start space-y-1 mx-2 text-sm">
+                {recentlyVisited.map((item, i) => (
+                  <div
+                    key={i}
+                    className="group flex items-center w-full gap-3 py-1 px-4 rounded-lg hover:bg-[#2C2C2C] hover:text-[#D5D5D5] cursor-pointer"
+                  >
+                    <IoDocumentTextOutline
+                      className="flex-shrink-0"
+                      onClick={() => handleCardClick(item.title)}
+                    />
 
-          <div
-            onClick={() => handleCardClick(item.title)}
-            className="flex justify-between items-center w-full gap-2 overflow-hidden"
-          >
-            <span className="truncate text-sm max-w-[60%]">{item.title}</span>
-            <span className="text-[12px] text-[#7D7D7D] translate-x-full group-hover:translate-x-0 transition-all ease duration-200 whitespace-nowrap">
-              {item.date}
-            </span>
-          </div>
+                    <div
+                      onClick={() => handleCardClick(item.title)}
+                      className="flex justify-between items-center w-full gap-2 overflow-hidden"
+                    >
+                      <span className="truncate text-sm max-w-[60%]">
+                        {item.title}
+                      </span>
+                      <span className="text-[12px] text-[#7D7D7D] translate-x-full group-hover:translate-x-0 transition-all ease duration-200 whitespace-nowrap">
+                        {item.date}
+                      </span>
+                    </div>
 
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-              setAnchorEl(e.currentTarget);
-              setSelectedItem(item);
-            }}
-          >
-            <PiDotsThree className="text-2xl translate-x-full opacity-0 group-hover:translate-x-0 group-hover:opacity-100 text-[#d5d5d5] hover:text-[#D5D5D5] transition-all duration-200" />
-          </div>
-        </div>
-      ))}
-    </ul>
-  </div>
-</>
-
+                    <div
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setAnchorEl(e.currentTarget);
+                        setSelectedItem(item);
+                      }}
+                    >
+                      <PiDotsThree className="text-2xl translate-x-full opacity-0 group-hover:translate-x-0 group-hover:opacity-100 text-[#d5d5d5] hover:text-[#D5D5D5] transition-all duration-200" />
+                    </div>
+                  </div>
+                ))}
+              </ul>
+            </div>
+          </>
         </div>
 
         {/* Bottom Settings */}
-        <ul onClick={handleSettings} className="flex flex-col items-start space-y-1 mx-2 mt-6 text-sm mb-4">
-          <li className="flex items-center w-full gap-3 py-1 px-4 rounded-lg hover:bg-[#2C2C2C] hover:text-[#D5D5D5] cursor-pointer">
-            <CiSettings className="text-xl" />
-            <span>Settings</span>
-          </li>
-        </ul>
+        <>
+          {/* Bottom Settings */}
+          <ul
+            onClick={handleSettings}
+            className="flex flex-col items-start space-y-1 mx-2 mt-6 text-sm mb-4"
+          >
+            <li className="flex items-center w-full gap-3 py-1 px-4 rounded-lg hover:bg-[#2C2C2C] hover:text-[#D5D5D5] cursor-pointer">
+              <CiSettings className="text-xl" />
+              <span>Settings</span>
+            </li>
+          </ul>
+
+          <SettingsModal
+            isOpen={isSettingsOpen}
+            onClose={() => setIsSettingsOpen(false)}
+          />
+        </>
       </div>
       <Menu
-          id="composition-menu"
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={() => setAnchorEl(null)}
-          anchorOrigin={{ vertical: "top", horizontal: "left" }}
-          transformOrigin={{ vertical: "top", horizontal: "left" }}
-          PaperProps={{
-            sx: {
-              backgroundColor: "#2C2C2C",
-              color: "#D5D5D5",
-              borderRadius: 2,
-              boxShadow: "0px 4px 10px rgba(0,0,0,0.3)",
-            },
+        id="composition-menu"
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={() => setAnchorEl(null)}
+        anchorOrigin={{ vertical: "top", horizontal: "left" }}
+        transformOrigin={{ vertical: "top", horizontal: "left" }}
+        PaperProps={{
+          sx: {
+            backgroundColor: "#2C2C2C",
+            color: "#D5D5D5",
+            borderRadius: 2,
+            boxShadow: "0px 4px 10px rgba(0,0,0,0.3)",
+          },
+        }}
+      >
+        <MenuItem
+          onClick={() => {
+            if (selectedItem) handleCardClick(selectedItem.title);
+            setAnchorEl(null);
           }}
+          sx={{ "&:hover": { backgroundColor: "#383838" } }}
         >
-          <MenuItem
-            onClick={() => {
-              if (selectedItem) handleCardClick(selectedItem.title);
-              setAnchorEl(null);
-            }}
-            sx={{ "&:hover": { backgroundColor: "#383838" } }}
-          >
-            Open
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              if (selectedItem) {
-                const newName = prompt(
-                  "Rename to:",
-                  selectedItem.title
+          Open
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            if (selectedItem) {
+              const newName = prompt("Rename to:", selectedItem.title);
+              if (newName && newName.trim()) {
+                const updated = recentlyVisited.map((item) =>
+                  item.title === selectedItem.title
+                    ? { ...item, title: newName.trim() }
+                    : item
                 );
-                if (newName && newName.trim()) {
-                  const updated = recentlyVisited.map((item) =>
-                    item.title === selectedItem.title
-                      ? { ...item, title: newName.trim() }
-                      : item
-                  );
-                  setRecentlyVisited(updated);
-                  localStorage.setItem(
-                    "recentPages",
-                    JSON.stringify(updated)
-                  );
+                setRecentlyVisited(updated);
+                localStorage.setItem("recentPages", JSON.stringify(updated));
 
-                  const html = localStorage.getItem(
-                    `page-${selectedItem.title}`
-                  );
-                  if (html) {
-                    localStorage.removeItem(`page-${selectedItem.title}`);
-                    localStorage.setItem(`page-${newName}`, html);
-                  }
-                }
-              }
-              setAnchorEl(null);
-            }}
-            sx={{ "&:hover": { backgroundColor: "#383838" } }}
-          >
-            Rename
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              if (selectedItem) {
-                const confirmDelete = confirm(
-                  `Are you sure you want to delete "${selectedItem.title}"?`
-                );
-                if (confirmDelete) {
-                  const filtered = recentlyVisited.filter(
-                    (item) => item.title !== selectedItem.title
-                  );
-                  setRecentlyVisited(filtered);
-                  localStorage.setItem(
-                    "recentPages",
-                    JSON.stringify(filtered)
-                  );
+                const html = localStorage.getItem(`page-${selectedItem.title}`);
+                if (html) {
                   localStorage.removeItem(`page-${selectedItem.title}`);
+                  localStorage.setItem(`page-${newName}`, html);
                 }
               }
-              setAnchorEl(null);
-            }}
-            sx={{ "&:hover": { backgroundColor: "#383838" } }}
-          >
-            Delete
-          </MenuItem>
-        </Menu>
+            }
+            setAnchorEl(null);
+          }}
+          sx={{ "&:hover": { backgroundColor: "#383838" } }}
+        >
+          Rename
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            if (selectedItem) {
+              const confirmDelete = confirm(
+                `Are you sure you want to delete "${selectedItem.title}"?`
+              );
+              if (confirmDelete) {
+                const filtered = recentlyVisited.filter(
+                  (item) => item.title !== selectedItem.title
+                );
+                setRecentlyVisited(filtered);
+                localStorage.setItem("recentPages", JSON.stringify(filtered));
+                localStorage.removeItem(`page-${selectedItem.title}`);
+              }
+            }
+            setAnchorEl(null);
+          }}
+          sx={{ "&:hover": { backgroundColor: "#383838" } }}
+        >
+          Delete
+        </MenuItem>
+      </Menu>
     </div>
   );
 }

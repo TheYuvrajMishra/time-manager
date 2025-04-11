@@ -131,9 +131,20 @@ export default function PageView() {
     saveContent();
   };
 
+  const [isHighlighted, setIsHighlighted] = useState(false);
+
   const highlightText = () => {
-    execCommand("backColor", "yellow");
-    execCommand("foreColor", "black");
+    const selection = window.getSelection();
+    if (!selection || selection.isCollapsed) return;
+
+    if (!isHighlighted) {
+      document.execCommand("backColor", false, "yellow");
+      document.execCommand("foreColor", false, "black");
+    } else {
+      document.execCommand("backColor", false, "transparent");
+      document.execCommand("foreColor", false, "inherit");
+    }
+    setIsHighlighted(!isHighlighted);
   };
 
   const insertImage = () => {
@@ -146,26 +157,29 @@ export default function PageView() {
   };
   const [trashedPages, setTrashedPages] = useState<any[]>([]);
   const [showTrash, setShowTrash] = useState(false);
-  
+
   useEffect(() => {
     const storedTrash = localStorage.getItem("trashedPages");
     if (storedTrash) {
       setTrashedPages(JSON.parse(storedTrash));
     }
   }, []);
-  
+
   const handleDelete = () => {
     if (confirm("Are you sure you want to move this page to trash?")) {
       const key = `page-${title}`;
       const storedPage = localStorage.getItem(key);
       if (storedPage) {
-        const updatedTrash = [...trashedPages, { title, content: storedPage, date: new Date().toLocaleString() }];
+        const updatedTrash = [
+          ...trashedPages,
+          { title, content: storedPage, date: new Date().toLocaleString() },
+        ];
         localStorage.setItem("trashedPages", JSON.stringify(updatedTrash));
         setTrashedPages(updatedTrash);
       }
-  
+
       localStorage.removeItem(key);
-  
+
       const stored = localStorage.getItem("recentPages");
       if (stored) {
         const recent = JSON.parse(stored).filter((p: any) => p.title !== title);
@@ -174,7 +188,6 @@ export default function PageView() {
       window.location.href = "/Home";
     }
   };
-  
 
   return (
     <div className="min-h-screen bg-[#1e1e1e] ml-[20%] text-white p-10 space-y-6">
@@ -312,34 +325,40 @@ export default function PageView() {
         ref={editorRef}
         contentEditable
         onInput={saveContent}
-        className="w-full h-[70vh] p-6 bg-[#2c2c2c] text-white border border-gray-700 rounded-xl overflow-y-auto focus:outline-none"
+        className="w-full h-full p-6 bg-[#2c2c2c] text-white border border-gray-700 rounded-xl overflow-y-auto focus:outline-none"
         suppressContentEditableWarning={true}
       >
         {/* Editable content goes here */}
       </div>
 
-      {/* Delete Button */}
       <div className="pt-6 flex justify-end gap-4">
-  {/* Clear Button */}
-  <button
-    onClick={handleClear}
-    className="cursor-pointer inline-flex items-center gap-2 text-sm bg-yellow-500 hover:bg-yellow-400 text-black font-medium px-4 py-2 rounded transition duration-200"
-    title="Clear Page"
-  >
-    🧹 Clear
-  </button>
+        {/* Back to Home Button */}
+        <button
+          onClick={() => (window.location.href = "/Home")}
+          className="cursor-pointer inline-flex items-center gap-2 text-sm bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-2 rounded transition duration-200"
+          title="Back to Home"
+        >
+          🏠 Back to Home
+        </button>
+        {/* Clear Button */}
+        <button
+          onClick={handleClear}
+          className="cursor-pointer inline-flex items-center gap-2 text-sm bg-yellow-500 hover:bg-yellow-400 text-black font-medium px-4 py-2 rounded transition duration-200"
+          title="Clear Page"
+        >
+          🧹 Clear
+        </button>
 
-  {/* Delete Button */}
-  <button
-    onClick={handleDelete}
-    className="cursor-pointer inline-flex items-center gap-2 text-sm bg-red-600 hover:bg-red-500 text-white font-medium px-4 py-2 rounded transition duration-200"
-    title="Delete Page"
-  >
-    <Trash2 className="w-4 h-4" />
-    Delete Page
-  </button>
-</div>
-
+        {/* Delete Button */}
+        <button
+          onClick={handleDelete}
+          className="cursor-pointer inline-flex items-center gap-2 text-sm bg-red-600 hover:bg-red-500 text-white font-medium px-4 py-2 rounded transition duration-200"
+          title="Delete Page"
+        >
+          <Trash2 className="w-4 h-4" />
+          Delete Page
+        </button>
+      </div>
     </div>
   );
 }

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 type PageItem = {
   title: string;
@@ -15,19 +15,19 @@ export default function HomePage() {
 
   // Load pages from localStorage on mount
   useEffect(() => {
-    const stored = localStorage.getItem('recentPages');
+    const stored = localStorage.getItem("recentPages");
     const parsed: PageItem[] = stored ? JSON.parse(stored) : [];
-  
+
     // Always ensure Welcome Page is there if nothing else
     if (parsed.length === 0) {
       const defaultPage = {
         title: "Welcome Page",
-        date: new Date().toLocaleDateString('en-GB', {
-          day: 'numeric',
-          month: 'short',
+        date: new Date().toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "short",
         }),
       };
-      localStorage.setItem('recentPages', JSON.stringify([defaultPage]));
+      localStorage.setItem("recentPages", JSON.stringify([defaultPage]));
       localStorage.setItem(
         "page-Welcome Page",
         `
@@ -56,8 +56,7 @@ export default function HomePage() {
         </p>
         `
       );
-      
-      
+
       setRecentlyVisited([defaultPage]);
     } else {
       setRecentlyVisited(parsed);
@@ -69,59 +68,62 @@ export default function HomePage() {
   };
 
   const handleAddNewPage = () => {
-    router.push('/new');
+    router.push("/new");
   };
   return (
-    <div className="flex min-h-screen bg-[#1e1e1e] text-white ml-[20%]">
+    <div className="flex min-h-screen z-0 bg-[#1e1e1e] text-white ml-[20%] "id="home-page">
       <main className="flex-1 p-10">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold underline">Good Evening, Yuvraj Mishra</h1>
+          <h1 className="text-4xl font-bold underline">
+            Good Evening, Yuvraj Mishra
+          </h1>
         </div>
 
         {/* Recently Visited */}
         <div>
-  <h2 className="text-lg font-semibold mb-3">Your Pages:</h2>
+          <h2 className="text-lg font-semibold mb-3">Your Pages:</h2>
 
-  {recentlyVisited.length > 0 ? (
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
-    {recentlyVisited.map((item, i) => (
-      <div
-        key={i}
-        onClick={() => handleCardClick(item.title)}
-        className="bg-[#1e1e1e] border border-white/10 rounded-xl overflow-hidden shadow hover:border-white/40 hover:shadow-xl cursor-pointer transition duration-500 group"
-      >
-        {/* Static image */}
-        <div className="h-32 w-full overflow-hidden">
-          <img
-            src="/neutral image _project_ themed with a file icon.png"
-            alt="Project preview"
-            className="w-full h-full brightness-75 group-hover:brightness-100 object-cover transition-transform ease duration-100 group-hover:scale-105"
-          />
+          {recentlyVisited.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
+              {recentlyVisited.map((item, i) => (
+                <div
+                  key={i}
+                  onClick={() => handleCardClick(item.title)}
+                  className="bg-[#1e1e1e] border border-white/10 rounded-xl overflow-hidden shadow hover:border-white/40 hover:shadow-xl cursor-pointer transition duration-500 group"
+                >
+                  {/* Static image */}
+                  <div className="h-32 w-full overflow-hidden z-0 ">
+                    <img
+                      src="/neutral image _project_ themed with a file icon.png"
+                      alt="Project preview"
+                      className="w-full h-full brightness-75 group-hover:brightness-100 object-cover transition-transform ease duration-100 scale-105 group-hover:scale-100"
+                    />
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-4">
+                    <div className="font-semibold text-sm text-[#e5e5e5] truncate group-hover:whitespace-normal">
+                      {item.title}
+                    </div>
+                    <div className="text-xs text-gray-400 mt-1 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all ease duration-200">
+                      {item.date}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-sm text-gray-400 mb-6">
+              No pages visited yet.
+            </div>
+          )}
         </div>
-
-        {/* Content */}
-        <div className="p-4">
-          <div className="font-semibold text-sm text-[#e5e5e5] truncate group-hover:whitespace-normal">
-            {item.title}
-          </div>
-          <div className="text-xs text-gray-400 mt-1 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all ease duration-200">{item.date}</div>
-        </div>
-      </div>
-    ))}
-  </div>
-) : (
-  <div className="text-sm text-gray-400 mb-6">No pages visited yet.</div>
-)}
-
-
-</div>
-
 
         {/* Welcome Box */}
         <div
           onClick={() => handleCardClick("Welcome Page")}
-          className="bg-[#2c2c2c] p-4 hover:bg-[#3c3c3c] p-6 rounded-lg shadow-md max-w-2xl cursor-pointer hover:shadow-lg transition"
+          className="bg-[#2c2c2c] p-4 hover:bg-[#3c3c3c] rounded-lg shadow-md max-w-2xl cursor-pointer hover:shadow-lg transition"
         >
           <h3 className="text-xl font-semibold flex items-center gap-2">
             📄 Welcome Page
