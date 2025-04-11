@@ -5,7 +5,7 @@ export async function POST(req: Request) {
   // Extract both message and conversation history from request
   const { message, conversationHistory = [] } = await req.json();
 
-  // Build conversation context for the prompt
+// Validate input
   const historyContext = conversationHistory
     .map((entry: any) => `User: ${entry.user}\nAssistant: ${entry.bot}`)
     .join('\n\n');
