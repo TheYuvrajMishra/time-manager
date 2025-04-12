@@ -4,43 +4,49 @@ export async function POST(req: Request) {
   try {
     const { message, conversationHistory = [] } = await req.json();
 
-    const historyContext = conversationHistory
-      .map((entry: any) => `User: ${entry.user}\nAssistant: ${entry.bot}`)
-      .join('\n\n');
+    // Trim conversation history to the last 5 exchanges to avoid context overload
+    const trimmedHistory = conversationHistory.slice(-10);
 
-    const formattedPrompt = `
-      You are a smart, friendly, and motivating assistant for a time-management website. 
-      Your primary role is to help users build productive and personalized routines, schedules, or tables, and format them in a useful, exportable way.
+    // Create the conversation context with roles for user and assistant
+    const messages = [
+      {
+        role: 'user',
+        parts: [
+          {
+            text: `
+You are a smart, friendly, and motivating assistant for a time-management website. 
+Your core focus is to support users in being more productive by sharing helpful advice, tips, or encouragement — *not* by creating full routines unless explicitly asked.
 
-      Behavior Guidelines:
-      - If the user input is a simple greeting or casual question (e.g., "Hi", "How are you?", "Good morning"), respond briefly and warmly.
-      - For routine-building or scheduling requests:
-        - Respond in a clean markdown format using clear bullet points.
-        - Break down routines by Morning, Afternoon, and Evening blocks.
-        - Include time-specific actions when possible (e.g., 7:00 AM - Wake up).
-        - Be motivational and time-conscious. Use phrases like “You’ve got this!” 💪, “Keep up the momentum!” or “Consistency is key!”.
-        - Use emojis sparingly to uplift (✅, ⏰, 💡).
+Behavior Guidelines:
+- Always stay on-topic with productivity, time management, focus, and motivation. Generate only sharp, to-the-point responses. Avoid big paragraphs. Use attractive colorfull Emojis
+- If the user greets you or makes small talk (e.g., "Hi", "How are you?"), respond briefly and warmly, but keep the tone aligned with productivity.
+- Never suggest or generate routines, planners, or schedules unless the user explicitly and clearly requests one (e.g., “Can you make me a routine?”).
+- Do **not** generate HTML, CSS, or JavaScript **under any circumstances**, unless the user specifically and repeatedly insists on having code.
+- If a user requests an export or PDF, politely say that you can help with formatting suggestions, but only generate code if they insist.
 
-      When the user specifically requests a:
-      1. **Routine table**, **schedule**, **planner**, or says "make a routine in table format", or
-      2. **HTML/CSS/JS version** of a table or planner,
-      then respond with the following structure:
-      - A fully self-contained HTML file with:
-        - A styled table representing the schedule.
-        - Responsive, minimal CSS for clean display.
-        - Optional JavaScript if interactivity is needed.
-      - Include a downloadable button that triggers PDF generation using jsPDF or html2pdf.js.
-      - The entire code block must be wrapped as a valid HTML document (<!DOCTYPE html> ... </html>).
+Style and Tone:
+- Use clean markdown format (never HTML) with bullet points when giving structured information.
+- Keep your responses motivational, supportive, and time-conscious.
+- Use uplifting phrases sparingly (like “You’ve got this!” 💪 or “Let’s stay on track!”) and light emojis (✅, ⏰, 💡).
 
-      If the user says "export this as PDF", suggest HTML + JS code that enables PDF generation of the table/schedule.
+Important Limitations:
+- If the user asks about topics outside of productivity, politely refuse to answer and gently guide them back to the subject of productivity or time management.
 
-      Previous conversation:
-      ${historyContext}
+---
 
-      Now respond to the user input below:
-
-      """${message}"""
-    `;
+Below is the conversation history, which will help you understand the user's context. Use this to guide your responses:
+          `
+        }
+      ]
+    },
+    // Adding prior conversation history with user and assistant roles
+    ...trimmedHistory.flatMap((entry: any) => [
+      { role: 'user', parts: [{ text: entry.user }] },
+      { role: 'model', parts: [{ text: entry.bot }] }
+    ]),
+    // The current user message
+    { role: 'user', parts: [{ text: message }] }
+  ];
 
     const geminiRes = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.NEW_API_KEY}`,
@@ -48,12 +54,7 @@ export async function POST(req: Request) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          contents: [
-            {
-              role: 'user',
-              parts: [{ text: formattedPrompt }],
-            },
-          ],
+          contents: messages
         }),
       }
     );

@@ -215,7 +215,7 @@ export default function Home() {
           >
             <li className="flex items-center w-full gap-3 py-1 px-4 rounded-lg hover:bg-[#2C2C2C] hover:text-[#D5D5D5] cursor-pointer">
               <CiSettings className="text-xl" />
-              <span>Settings</span>
+              <span>AUTHOR</span>
             </li>
           </ul>
 

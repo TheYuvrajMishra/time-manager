@@ -25,6 +25,7 @@ import {
   Moon,
   Trash2,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function PageView() {
   const handleClear = () => {
@@ -36,7 +37,7 @@ export default function PageView() {
       }
     }
   };
-
+  const router = useRouter();
   const params = useParams();
   const title = decodeURIComponent(params.title as string);
   const editorRef = useRef<HTMLDivElement>(null);
@@ -194,6 +195,13 @@ export default function PageView() {
       {/* Header */}
       <div className="flex items-center justify-between border-b border-gray-700 pb-6">
         <h1 className="text-4xl font-semibold tracking-tight">{title}</h1>
+        <button
+          onClick={() => (router.push("/Home"))}
+          className="flex items-center gap-2 bg-black text-white border border-dashed border-white/30 px-2 py-2 rounded-xl transition-all hover:bg-white/90 hover:text-black hover:border-white/50 shadow-md transform cursor-pointer"
+          title="Back to Home"
+        >
+          🏠 Back to Home
+        </button>
       </div>
 
       {/* Toolbar */}
@@ -318,6 +326,15 @@ export default function PageView() {
         >
           <ImagePlus className="w-5 h-5" />
         </button>
+        <div className="ml-auto">
+        <button
+          onClick={handleClear}
+          className="flex items-center gap-2 text-white px-2 py-2 transition-all  hover:text-red-500 hover:underline transform cursor-pointer"
+          title="Clear Page"
+        >
+        Clear
+        </button>
+        </div>
       </div>
 
       {/* Editor */}
@@ -331,31 +348,18 @@ export default function PageView() {
         {/* Editable content goes here */}
       </div>
 
-      <div className="pt-6 flex justify-end gap-4">
+      <div className="pt-6 flex justify-end gap-2">
         {/* Back to Home Button */}
-        <button
-          onClick={() => (window.location.href = "/Home")}
-          className="cursor-pointer inline-flex items-center gap-2 text-sm bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-2 rounded transition duration-200"
-          title="Back to Home"
-        >
-          🏠 Back to Home
-        </button>
+
         {/* Clear Button */}
-        <button
-          onClick={handleClear}
-          className="cursor-pointer inline-flex items-center gap-2 text-sm bg-yellow-500 hover:bg-yellow-400 text-black font-medium px-4 py-2 rounded transition duration-200"
-          title="Clear Page"
-        >
-          🧹 Clear
-        </button>
 
         {/* Delete Button */}
         <button
           onClick={handleDelete}
-          className="cursor-pointer inline-flex items-center gap-2 text-sm bg-red-600 hover:bg-red-500 text-white font-medium px-4 py-2 rounded transition duration-200"
+          className="flex items-center gap-2 bg-red-500 text-white border border-dashed border-white/30 px-2 py-2 rounded-xl transition-all hover:bg-white/90 hover:text-black hover:border-black/50 shadow-md transform cursor-pointer"
           title="Delete Page"
         >
-          <Trash2 className="w-4 h-4" />
+          <Trash2 className="w-5 h-5" />
           Delete Page
         </button>
       </div>

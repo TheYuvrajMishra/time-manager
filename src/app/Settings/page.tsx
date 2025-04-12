@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { X } from "lucide-react";
+import { X, Github, Linkedin } from "lucide-react"; // ✅ Import icons
 
 const SettingsSidebar = ({
   isOpen,
@@ -13,7 +13,6 @@ const SettingsSidebar = ({
   const router = useRouter();
   const sidebarRef = useRef<HTMLDivElement>(null);
 
-  // Close on outside click or ESC
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -38,7 +37,6 @@ const SettingsSidebar = ({
     };
   }, [onClose]);
 
-  // Blur background & disable scroll
   useEffect(() => {
     const homePageElement = document.querySelector("#home-page");
 
@@ -76,9 +74,8 @@ const SettingsSidebar = ({
         {/* Button Group */}
         <div className="flex flex-col w-full text-sm">
           {[
-            { label: "Preferences", path: "/Preferences" },
-            { label: "Security", path: "/user/settings/security" },
-            { label: "Billing", path: "/user/settings/billing" },
+            { label: "Github", path: "https://github.com/TheYuvrajMishra", icon: <Github className="w-4 h-4" /> },
+            { label: "LinkedIn", path: "https://www.linkedin.com/in/the-yuvraj-mishra/", icon: <Linkedin className="w-4 h-4" /> },
           ].map((item) => (
             <button
               key={item.label}
@@ -86,8 +83,9 @@ const SettingsSidebar = ({
                 router.push(item.path);
                 onClose();
               }}
-              className="w-full text-center py-3 text-white border-b border-amber-50 hover:bg-[#2C2C2C] transition-colors"
+              className="w-full flex items-center gap-2 py-3 px-2 text-white border-b border-amber-50 hover:bg-[#2C2C2C] transition-colors"
             >
+              {item.icon}
               {item.label}
             </button>
           ))}

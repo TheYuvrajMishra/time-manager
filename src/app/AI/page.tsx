@@ -1,164 +1,87 @@
-"use client";
+'use client'
+import React, { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { Bot, CalendarCheck } from 'lucide-react'
 
-import { useState, useEffect, useRef } from "react";
-import ReactMarkdown from "react-markdown";
-import { Bot, User } from "lucide-react";
+function AI() {
+  const router = useRouter()
 
-export default function Home() {
-  const [messages, setMessages] = useState<
-    { role: "user" | "bot"; text: string }[]
-  >([]);
-  const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const handleclickChatbot = () => {
+    router.push('/AI/chatbot')
+  }
 
-  const clearChat = () => {
-    if (confirm("Clear chat history?")) {
-      setMessages([]);
-      localStorage.removeItem("chatHistory");
-      alert("Chat cleared!");
-    }
-  };
-
-  const sendMessage = async () => {
-    if (!input.trim()) return;
-    setMessages((prev) => [...prev, { role: "user", text: input }]);
-    setInput("");
-    setLoading(true);
-
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: input }),
-    });
-    const { reply } = await res.json();
-    setMessages((prev) => [...prev, { role: "bot", text: reply }]);
-    setLoading(false);
-  };
+  const handleclickRoutine = () => {
+    router.push('/AI/Routine/routine')
+  }
 
   useEffect(() => {
-    if (messages.length) {
-      localStorage.setItem("chatHistory", JSON.stringify(messages));
-    }
-  }, [messages]);
+    // Create subtle sparkle effect
+    const sparkleContainer = document.querySelector('.sparkles-container');
 
-  useEffect(() => {
-    const saved = localStorage.getItem("chatHistory");
-    if (saved) setMessages(JSON.parse(saved));
+    const createSparkle = () => {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      sparkleContainer?.appendChild(sparkle);
+
+      // Set random position
+      const x = Math.random() * window.innerWidth;
+      const y = Math.random() * window.innerHeight;
+      sparkle.style.left = `${x}px`;
+      sparkle.style.top = `${y}px`;
+
+      // Remove sparkle after animation duration
+      setTimeout(() => {
+        sparkle.remove();
+      }, 2500); // Increased time for slower disappearance
+    };
+
+    // Generate sparkles every 150ms (less frequent)
+    const interval = setInterval(createSparkle, 150);
+
+    return () => {
+      clearInterval(interval); // Cleanup on component unmount
+    };
   }, []);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, loading]);
-
   return (
-    <main className="flex flex-col ml-[20%] h-screen bg-[#202020] text-white">
-      {/* Header */}
-      <header className="px-6 py-4 bg-[#101010] border-b border-[#303030]">
-        <h1 className="text-2xl font-semibold bg-clip-text text-transparent bg-white">
-          💬 Manager
-        </h1>
-      </header>
+    <div className="ml-[20%] bg-gradient-to-r from-[#101010] via-[#232323] overflow-hidden to-[#101010] min-h-screen flex flex-col items-center justify-center gap-14 p-12 text-white relative">
+      {/* Sparkles Container */}
+      <div className="sparkles-container absolute top-0 left-0 w-full h-full pointer-events-none"></div>
 
-      {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto px-6 py-4">
-        <div className="max-w-[95%] mx-auto flex flex-col space-y-4">
-          {messages.map((msg, i) => (
-            <div
-              key={i}
-              className={`flex items-end ${
-                msg.role === "user" ? "justify-end" : "justify-start"
-              }`}
-            >
-              {msg.role === "bot" && (
-                <div className="p-2 mr-2 rounded-full bg-cyan-400 drop-shadow-[0_0_6px_rgba(0,255,255,0.5)]">
-                  <Bot size={20} className="text-black" />
-                </div>
-              )}
-
-              <div
-                className={`px-4 py-2 max-w-[70%] text-sm leading-relaxed backdrop-blur-sm rounded-2xl transition break-words whitespace-pre-wrap overflow-x-auto ${
-                  msg.role === "user"
-                    ? "bg-[#232323] border-white/20 border border-dashed mr-2 rounded-br-none drop-shadow-[0_0_8px_rgba(255,255,255,0.1)]"
-                    : "bg-[#101010] p-4 border-white/20 border border-dashed bg-opacity-20 rounded-bl-none drop-shadow-[0_0_8px_rgba(255,255,255,0.1)]"
-                }`}
-              >
-                {msg.role === "bot" ? (
-                  <ReactMarkdown>{msg.text}</ReactMarkdown>
-                ) : (
-                  <p className="text-wrap">{msg.text}</p>
-                )}
-              </div>
-
-              {msg.role === "user" && (
-                <div className="p-2 rounded-full bg-purple-500 drop-shadow-[0_0_6px_rgba(128,0,255,0.5)]">
-                  <User size={20} />
-                </div>
-              )}
-            </div>
-          ))}
-
-          {loading && (
-            <div className="flex items-center gap-3 my-4">
-              <div className="flex-shrink-0 bg-[#00FFAB] p-2 rounded-full text-black shadow-lg">
-                <Bot size={20} />
-              </div>
-              <div className="bg-[#151515] px-4 py-2 rounded-xl text-sm flex gap-1 animate-pulse text-white">
-                <span>Typing</span>
-                <span className="animate-bounce">.</span>
-                <span className="animate-bounce [animation-delay:-0.2s]">
-                  .
-                </span>
-                <span className="animate-bounce [animation-delay:-0.4s]">
-                  .
-                </span>
-              </div>
-            </div>
-          )}
-
-          <div ref={messagesEndRef} />
-        </div>
+      {/* Heading */}
+      <div className="text-center mb-12 z-10">
+        <h1 className="text-5xl font-bold text-yellow-300 mb-3">"Our AI Tools"</h1>
+        <p className="text-lg text-gray-300">Explore innovative solutions powered by AI that will boost your productivity.</p>
       </div>
 
-      {/* Input Bar */}
-      <footer className="px-6 py-4 bg-[#101010] border-t border-dashed border-[#303030] flex items-center space-x-4">
-        <button
-          onClick={clearChat}
-          className="bg-black rounded-full py-2 px-2.5 hover:bg-white/10 transition-all transition"
-          title="Clear Chat"
+      {/* Cards */}
+      <div className="flex flex-row gap-12 items-center justify-center z-10">
+        {/* Chatbot Button */}
+        <div
+          onClick={handleclickChatbot}
+          className="w-80 p-6 rounded-3xl bg-white/5 backdrop-blur-md border border-dashed border-yellow-400/30 hover:border-yellow-400 transition-all cursor-pointer shadow-xl hover:shadow-2xl transform duration-300 ease-in-out"
         >
-          🗑️
-        </button>
+          <div className="flex items-center gap-4 mb-3">
+            <Bot className="text-yellow-300" size={32} />
+            <h2 className="text-2xl font-semibold text-white">Chat Bot</h2>
+          </div>
+          <p className="text-sm text-gray-300">Get instant answers and support from our AI assistant.</p>
+        </div>
 
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-          placeholder="Type your message…"
-          className="flex-1 px-4 py-3 bg-[#202020] bg-opacity-80 placeholder-gray-500 rounded-full focus:outline-none focus:ring-2 focus:ring-cyan-400 transition"
-        />
-        <button
-          className="bg-black rounded-full hover:bg-white/10 font-semibold drop-shadow-[0_0_8px_rgba(0,255,255,0.6) text-white py-2 px-3 transition cursor-pointer"
-          onClick={() => {
-            const blob = new Blob([JSON.stringify(messages, null, 2)], {
-              type: "application/json",
-            });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = "chat-log.json";
-            link.click();
-          }}
+        {/* Routine Generator Button */}
+        <div
+          onClick={handleclickRoutine}
+          className="w-80 p-6 rounded-3xl bg-white/5 backdrop-blur-md border border-dashed border-yellow-400/30 hover:border-yellow-400 transition-all cursor-pointer shadow-xl hover:shadow-2xl transform duration-300 ease-in-out"
         >
-          🡫
-        </button>
-        <button
-          onClick={sendMessage}
-          className="px-3 py-2  bg-black rounded-full hover:bg-white/10 transition-all cursor-pointer"
-        >
-          ➤
-        </button>
-      </footer>
-    </main>
-  );
+          <div className="flex items-center gap-4 mb-3">
+            <CalendarCheck className="text-yellow-300" size={32} />
+            <h2 className="text-2xl font-semibold text-white">Routine Generator</h2>
+          </div>
+          <p className="text-sm text-gray-300">Generate daily routines tailored to your schedule and goals.</p>
+        </div>
+      </div>
+    </div>
+  )
 }
+
+export default AI

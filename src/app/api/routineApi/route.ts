@@ -11,33 +11,37 @@ export async function POST(req: Request) {
     .join('\n\n');
 
 
-  const formattedPrompt = `
-Generate a personalized daily routine for the following user preferences.
-
-User Input: """${message}"""
-
-Output the result in this JSON format only:
-
-{
-  "morning": [
-    { "time": "7:00 AM", "activity": "Wake up" },
-    { "time": "7:30 AM", "activity": "Exercise" }
-  ],
-  "afternoon": [
-    { "time": "12:00 PM", "activity": "Lunch" },
-    { "time": "1:00 PM", "activity": "Focus Work" }
-  ],
-  "evening": [
-    { "time": "6:00 PM", "activity": "Walk" },
-    { "time": "9:00 PM", "activity": "Read" }
-  ]
-}
-
-Instructions:
-- Tailor the routine to the user's lifestyle or goals.
-- Be concise, motivational, and use realistic time blocks.
-- Return **only** the pure JSON (no markdown/code formatting).
-`;
+    const formattedPrompt = `
+    You are an expert in habit-building, time management, and personal productivity. Your task is to generate a highly personalized and realistic daily routine based on the user's specific inputs, preferences, lifestyle, professional commitments, wellness goals, and energy patterns.
+    
+    Instructions:
+    - Base your suggestions on the user's stated sleep patterns, work hours, hobbies, personal goals (e.g., fitness, learning, relaxation), and productivity preferences (e.g., deep work periods, breaks).
+    - Time slots should be practical, spaced realistically, and avoid overlaps.
+    - Be motivational and purpose-driven when assigning tasks (e.g., “Reflect on goals,” “Deep work session”).
+    - Do NOT return any explanation, markdown formatting, or surrounding text. Return **only** the final JSON output.
+    
+    User Input: """${message}"""
+    
+    Generate a structured and balanced routine divided into three parts: morning, afternoon, and evening.
+    
+    Your response **must** follow this strict JSON format:
+    
+    {
+      "morning": [
+        { "time": "7:00 AM", "activity": "Wake up" },
+        { "time": "7:30 AM", "activity": "Exercise" }
+      ],
+      "afternoon": [
+        { "time": "12:00 PM", "activity": "Lunch" },
+        { "time": "1:00 PM", "activity": "Focus Work" }
+      ],
+      "evening": [
+        { "time": "6:00 PM", "activity": "Walk" },
+        { "time": "9:00 PM", "activity": "Read" }
+      ]
+    }`;
+    
+    
 
   
 
