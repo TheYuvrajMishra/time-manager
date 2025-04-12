@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Time-Manager",
-  description: "Time Managing App",
+  title: "Manager",
+  description: "Productivity & Organization App",
 };
 
 export default function RootLayout({
