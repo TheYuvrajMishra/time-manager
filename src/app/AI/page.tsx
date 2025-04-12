@@ -77,16 +77,16 @@ export default function Home() {
               )}
 
               <div
-                className={`px-4 py-2 max-w-[70%] text-sm leading-relaxed backdrop-blur-sm rounded-2xl transition ${
+                className={`px-4 py-2 max-w-[70%] text-sm leading-relaxed backdrop-blur-sm rounded-2xl transition break-words whitespace-pre-wrap overflow-x-auto ${
                   msg.role === "user"
-                    ? "bg-[#232323] border-white/20 border border-dashed  mr-2 rounded-br-none drop-shadow-[0_0_8px_rgba(255,255,255,0.1)]"
-                    : "bg-[#101010]  border-white/20 border border-dashed bg-opacity-20 rounded-bl-none drop-shadow-[0_0_8px_rgba(255,255,255,0.1)]"
+                    ? "bg-[#232323] border-white/20 border border-dashed mr-2 rounded-br-none drop-shadow-[0_0_8px_rgba(255,255,255,0.1)]"
+                    : "bg-[#101010] p-4 border-white/20 border border-dashed bg-opacity-20 rounded-bl-none drop-shadow-[0_0_8px_rgba(255,255,255,0.1)]"
                 }`}
               >
                 {msg.role === "bot" ? (
                   <ReactMarkdown>{msg.text}</ReactMarkdown>
                 ) : (
-                  <p>{msg.text}</p>
+                  <p className="text-wrap">{msg.text}</p>
                 )}
               </div>
 
@@ -99,15 +99,19 @@ export default function Home() {
           ))}
 
           {loading && (
-            <div className="flex items-center space-x-3">
-              <div className="p-2 rounded-full bg-cyan-400 drop-shadow-[0_0_6px_rgba(255,255,255,0.1)]">
-                <Bot size={20} className="text-black" />
+            <div className="flex items-center gap-3 my-4">
+              <div className="flex-shrink-0 bg-[#00FFAB] p-2 rounded-full text-black shadow-lg">
+                <Bot size={20} />
               </div>
-              <div className="flex items-center gap-1 px-4 py-2 text-sm bg-[#101010] bg-opacity-80 rounded-xl animate-pulse drop-shadow-[0_0_6px_rgba(255,255,255,0.2)]">
+              <div className="bg-[#151515] px-4 py-2 rounded-xl text-sm flex gap-1 animate-pulse text-white">
                 <span>Typing</span>
                 <span className="animate-bounce">.</span>
-                <span className="animate-bounce delay-200">.</span>
-                <span className="animate-bounce delay-300">.</span>
+                <span className="animate-bounce [animation-delay:-0.2s]">
+                  .
+                </span>
+                <span className="animate-bounce [animation-delay:-0.4s]">
+                  .
+                </span>
               </div>
             </div>
           )}
@@ -117,10 +121,10 @@ export default function Home() {
       </div>
 
       {/* Input Bar */}
-      <footer className="px-6 py-4 bg-[#101010] border-t border-[#303030] flex items-center space-x-4">
+      <footer className="px-6 py-4 bg-[#101010] border-t border-dashed border-[#303030] flex items-center space-x-4">
         <button
           onClick={clearChat}
-          className="text-gray-400 hover:text-red-500 transition"
+          className="bg-black rounded-full py-2 px-2.5 hover:bg-white/10 transition-all transition"
           title="Clear Chat"
         >
           🗑️
@@ -134,10 +138,23 @@ export default function Home() {
           placeholder="Type your message…"
           className="flex-1 px-4 py-3 bg-[#202020] bg-opacity-80 placeholder-gray-500 rounded-full focus:outline-none focus:ring-2 focus:ring-cyan-400 transition"
         />
-
+        <button
+          className="bg-black rounded-full hover:bg-white/10 font-semibold drop-shadow-[0_0_8px_rgba(0,255,255,0.6) text-white py-2 px-3 transition cursor-pointer"
+          onClick={() => {
+            const blob = new Blob([JSON.stringify(messages, null, 2)], {
+              type: "application/json",
+            });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "chat-log.json";
+            link.click();
+          }}
+        >
+          🡫
+        </button>
         <button
           onClick={sendMessage}
-          className="px-5 py-3  bg-black/80 rounded-full font-semibold drop-shadow-[0_0_8px_rgba(0,255,255,0.6)] hover:black transition-all"
+          className="px-3 py-2  bg-black rounded-full hover:bg-white/10 transition-all cursor-pointer"
         >
           ➤
         </button>
