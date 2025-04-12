@@ -11,7 +11,7 @@ export default function HomePage() {
   const handleSend = async () => {
     setLoading(true);
 
-    const res = await fetch('/api/chat', {
+    const res = await fetch('/api/routineApi', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message })
