@@ -27,18 +27,19 @@ export async function POST(req: Request) {
     Your response **must** follow this strict JSON format:
     
     {
-      "morning": [
+      "Day 01": [
         { "time": "7:00 AM", "activity": "Wake up" },
-        { "time": "7:30 AM", "activity": "Exercise" }
+        { "time": "10:00 PM", "activity": "Sleep" }
       ],
-      "afternoon": [
-        { "time": "12:00 PM", "activity": "Lunch" },
-        { "time": "1:00 PM", "activity": "Focus Work" }
+      "Day 02": [
+        { "time": "7:00 AM", "activity": "Wake up" },
+        { "time": "10:00 PM", "activity": "Sleep" }
       ],
-      "evening": [
-        { "time": "6:00 PM", "activity": "Walk" },
-        { "time": "9:00 PM", "activity": "Read" }
+      "Day 03": [
+        { "time": "7:00 AM", "activity": "Wake up" },
+        { "time": "10:00 PM", "activity": "Sleep" }
       ]
+      ...
     }`;
     
     

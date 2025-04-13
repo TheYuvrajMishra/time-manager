@@ -5,11 +5,19 @@ import { useState } from 'react';
 
 export default function HomePage() {
   const router = useRouter();
-  const [message, setMessage] = useState('');
+  const [topic, setTopic] = useState('');
+  const [duration, setDuration] = useState('');
+  const [timePerDay, setTimePerDay] = useState('');
+  const [busyTime, setBusyTime] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const generatePrompt = () => {
+    return `I want to learn ${topic}, within ${duration}. I can invest ${timePerDay} daily. I am usually busy during ${busyTime}.`;
+  };
 
   const handleSend = async () => {
     setLoading(true);
+    const message = generatePrompt();
 
     const res = await fetch('/api/routineApi', {
       method: 'POST',
@@ -54,13 +62,33 @@ export default function HomePage() {
       {/* Content */}
       <div className="flex-1 flex items-center justify-center px-6 py-8">
         <div className="w-full max-w-xl bg-[#1a1a1a] p-8 rounded-2xl shadow-lg border border-dashed border-white/10 backdrop-blur-sm">
-          <h2 className="text-lg font-medium mb-4">Enter your prompt</h2>
+          <h2 className="text-lg font-medium mb-4">Fill your learning details</h2>
+
           <input
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            className="w-full px-4 py-2 mb-4 rounded-xl bg-[#101010] text-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-cyan-400"
-            placeholder="e.g. Make me a daily routine"
+            value={topic}
+            onChange={(e) => setTopic(e.target.value)}
+            className="w-full px-4 py-2 mb-4 rounded-xl bg-[#101010] text-white border border-white/20"
+            placeholder="Which topic do you want to learn?"
           />
+          <input
+            value={duration}
+            onChange={(e) => setDuration(e.target.value)}
+            className="w-full px-4 py-2 mb-4 rounded-xl bg-[#101010] text-white border border-white/20"
+            placeholder="In the duration of? (e.g., 2 months)"
+          />
+          <input
+            value={timePerDay}
+            onChange={(e) => setTimePerDay(e.target.value)}
+            className="w-full px-4 py-2 mb-4 rounded-xl bg-[#101010] text-white border border-white/20"
+            placeholder="How much time can you invest daily? (e.g., 2 hours)"
+          />
+          <input
+            value={busyTime}
+            onChange={(e) => setBusyTime(e.target.value)}
+            className="w-full px-4 py-2 mb-4 rounded-xl bg-[#101010] text-white border border-white/20"
+            placeholder="When are you usually busy? (e.g., 9 AM - 5 PM)"
+          />
+
           <button
             onClick={handleSend}
             disabled={loading}
