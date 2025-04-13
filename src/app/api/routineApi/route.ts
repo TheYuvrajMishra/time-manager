@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     
     User Input: """${message}"""
     
-    Generate a structured and balanced routine divided into three parts: morning, afternoon, and evening.
+    Generate a structured, balanced and *Detailed* routine divided into three parts: morning, afternoon, and evening.
     
     Your response **must** follow this strict JSON format:
     
@@ -38,8 +38,35 @@ export async function POST(req: Request) {
       "Day 03": [
         { "time": "7:00 AM", "activity": "Wake up" },
         { "time": "10:00 PM", "activity": "Sleep" }
+      ],
+      "Day 04": [
+        { "time": "7:00 AM", "activity": "Wake up" },
+        { "time": "10:00 PM", "activity": "Sleep" }
+      ],
+      "Day 05": [
+        { "time": "7:00 AM", "activity": "Wake up" },
+        { "time": "10:00 PM", "activity": "Sleep" }
+      ],
+      "Day 06": [
+        { "time": "7:00 AM", "activity": "Wake up" },
+        { "time": "10:00 PM", "activity": "Sleep" }
+      ],
+      "Day 07": [
+        { "time": "7:00 AM", "activity": "Wake up" },
+        { "time": "10:00 PM", "activity": "Sleep" }
+      ],     
+      "Day 08": [
+        { "time": "7:00 AM", "activity": "Wake up" },
+        { "time": "10:00 PM", "activity": "Sleep" }
+      ],
+      "Day 09": [
+        { "time": "7:00 AM", "activity": "Wake up" },
+        { "time": "10:00 PM", "activity": "Sleep" }
+      ],     
+      "Day 10": [
+        { "time": "7:00 AM", "activity": "Wake up" },
+        { "time": "10:00 PM", "activity": "Sleep" }
       ]
-      ...
     }`;
     
     

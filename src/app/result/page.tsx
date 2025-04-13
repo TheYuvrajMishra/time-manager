@@ -6,7 +6,6 @@ import React from "react";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 
-
 type PageItem = {
   title: string;
   date: string;
@@ -16,7 +15,6 @@ type RoutineItem = { time: string; activity: string };
 type Routine = Record<string, RoutineItem[]>;
 
 export default function ResultPage() {
-  
   const searchParams = useSearchParams();
   const router = useRouter();
   const [routine, setRoutine] = useState<Routine>({});
@@ -56,7 +54,7 @@ export default function ResultPage() {
     const doc = new jsPDF();
 
     // Fill background with black
-    doc.setFillColor(0, 0, 0);
+    doc.setFillColor(255, 255, 255);
     doc.rect(
       0,
       0,
@@ -66,7 +64,7 @@ export default function ResultPage() {
     );
 
     // Title styling
-    doc.setTextColor(255, 255, 255);
+    doc.setTextColor(25, 25, 25);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(22);
     doc.text("Your Daily Routine", 14, 15);
@@ -101,7 +99,7 @@ export default function ResultPage() {
           lineWidth: 0.1,
         },
         headStyles: {
-          fillColor: [60, 60, 60],
+          fillColor: [50, 50, 60],
           textColor: 255,
           fontStyle: "bold",
           font: "helvetica",
@@ -147,91 +145,95 @@ export default function ResultPage() {
       {/* Routine Checklist */}
       <section className="flex-1 overflow-y-auto px-6 py-8">
         {Object.keys(routine).length === 0 ? (
-  <p className="text-gray-300 text-center text-lg mt-10">
-    No routine data available.
-  </p>
-) : (
-  <div className="w-full overflow-x-auto">
-    <table className="w-full border-collapse shadow-md text-sm">
-      <thead>
-        <tr className="bg-[#101010] text-white border-b border-white/10">
-          <th className="px-6 py-3 text-left font-semibold border-b border-white/10">
-            Time
-          </th>
-          <th className="px-6 py-3 text-left font-semibold border-b border-white/10">
-            Activity
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {Object.entries(routine).map(([partOfDay, tasks]) => (
-          <React.Fragment key={partOfDay}>
-            <tr className="bg-[#2a2a2a] border-t border-white/10">
-              <td
-                colSpan={2}
-                className="px-6 py-3 font-bold uppercase text-cyan-400 tracking-wide border-b border-white/10"
-              >
-                {partOfDay}
-              </td>
-            </tr>
-
-            {Array.isArray(tasks) ? (
-              tasks.map((task, i) => {
-                const taskKey = `${partOfDay}-${i}`;
-                const isChecked = checkedItems[taskKey];
-
-                return (
-                  <tr
-                    key={taskKey}
-                    onClick={() => toggleCheck(taskKey)}
-                    className={`cursor-pointer transition-all duration-200 ${
-                      isChecked ? "bg-[#1e1e1e]" : "hover:bg-[#2e2e2e]"
-                    }`}
-                  >
-                    <td className="px-6 py-2 border-b border-white/10">
-                      <label className="flex items-center space-x-2 w-full">
-                        <input
-                          type="checkbox"
-                          checked={!!isChecked}
-                          onClick={(e) => e.stopPropagation()}
-                          onChange={() => toggleCheck(taskKey)}
-                          className="form-checkbox h-4 w-4 text-cyan-400 border-gray-500 rounded focus:ring-0"
-                        />
-                        <span
-                          className={`transition-all ${
-                            isChecked ? "line-through text-gray-400" : ""
-                          }`}
-                        >
-                          🕒 {task.time}
-                        </span>
-                      </label>
-                    </td>
-                    <td className="px-6 py-2 border-b border-white/10">
-                      <span
-                        className={`transition-all ${
-                          isChecked ? "line-through text-gray-400" : ""
-                        }`}
+          <p className="text-gray-300 text-center text-lg mt-10">
+            No routine data available.
+          </p>
+        ) : (
+          <div className="w-full overflow-x-auto">
+            <table className="w-full border-collapse shadow-md text-sm">
+              <thead>
+                <tr className="bg-[#101010] text-white border-b border-white/10">
+                  <th className="px-6 py-3 text-left font-semibold border-b border-white/10">
+                    Time
+                  </th>
+                  <th className="px-6 py-3 text-left font-semibold border-b border-white/10">
+                    Activity
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(routine).map(([partOfDay, tasks]) => (
+                  <React.Fragment key={partOfDay}>
+                    <tr className="bg-[#2a2a2a] border-t border-white/10">
+                      <td
+                        colSpan={2}
+                        className="px-6 py-3 font-bold uppercase text-cyan-400 tracking-wide border-b border-white/10"
                       >
-                        📌 {task.activity}
-                      </span>
-                    </td>
-                  </tr>
-                );
-              })
-            ) : (
-              <tr>
-                <td colSpan={2} className="px-6 py-2 italic text-gray-400">
-                  No tasks for this time period.
-                </td>
-              </tr>
-            )}
-          </React.Fragment>
-        ))}
-      </tbody>
-    </table>
-  </div>
-)}
+                        {partOfDay}
+                      </td>
+                    </tr>
 
+                    {Array.isArray(tasks) ? (
+                      tasks.map((task, i) => {
+                        const taskKey = `${partOfDay}-${i}`;
+                        const isChecked = checkedItems[taskKey];
+
+                        return (
+                          <tr
+                            key={taskKey}
+                            onClick={() => toggleCheck(taskKey)}
+                            className={`cursor-pointer transition-all duration-200 ${
+                              isChecked ? "bg-[#1e1e1e]" : "hover:bg-[#2e2e2e]"
+                            }`}
+                          >
+                            <td className="px-6 py-2 border-b border-white/10">
+                              <label className="flex items-center space-x-2 w-full">
+                                <input
+                                  type="checkbox"
+                                  checked={!!isChecked}
+                                  onClick={(e) => e.stopPropagation()}
+                                  onChange={() => toggleCheck(taskKey)}
+                                  className="form-checkbox h-4 w-4 text-cyan-400 border-gray-500 rounded focus:ring-0"
+                                />
+                                <span
+                                  className={`transition-all ${
+                                    isChecked
+                                      ? "line-through text-gray-400"
+                                      : ""
+                                  }`}
+                                >
+                                  🕒 {task.time}
+                                </span>
+                              </label>
+                            </td>
+                            <td className="px-6 py-2 border-b border-white/10">
+                              <span
+                                className={`transition-all ${
+                                  isChecked ? "line-through text-gray-400" : ""
+                                }`}
+                              >
+                                📌 {task.activity}
+                              </span>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan={2}
+                          className="px-6 py-2 italic text-gray-400"
+                        >
+                          No tasks for this time period.
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </section>
 
       {/* Download Button */}

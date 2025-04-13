@@ -71,10 +71,11 @@ export default function HomePage() {
             placeholder="Which topic do you want to learn?"
           />
           <input
-            value={duration}
+            value={10}
+            readOnly
             onChange={(e) => setDuration(e.target.value)}
             className="w-full px-4 py-2 mb-4 rounded-xl bg-[#101010] text-white border border-white/20"
-            placeholder="In the duration of? (e.g., 2 months)"
+            placeholder="In the duration of? (e.g., 10-20 days)"
           />
           <input
             value={timePerDay}
