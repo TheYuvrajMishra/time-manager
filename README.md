@@ -1,4 +1,4 @@
-# 🧠 Notion Clone – Productivity & Organization App
+# 🧠 Productivity & Organization App
 
 ## ✨ Overview
 
