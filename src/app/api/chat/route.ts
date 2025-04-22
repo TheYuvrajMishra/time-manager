@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
-    const { message, conversationHistory = [] } = await req.json();
+    const { message } = await req.json();
 
     // Trim conversation history to the last 5 exchanges to avoid context overload
     // const trimmedHistory = conversationHistory.slice(-10);
