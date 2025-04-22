@@ -50,7 +50,7 @@ function AI() {
 
       {/* Heading */}
       <div className="text-center mb-12 z-10">
-        <h1 className="text-5xl font-bold text-yellow-300 mb-3">"Our AI Tools"</h1>
+        <h1 className="text-5xl font-bold text-yellow-300 mb-3">Our AI Tools</h1>
         <p className="text-lg text-gray-300">Explore innovative solutions powered by AI that will boost your productivity.</p>
       </div>
 

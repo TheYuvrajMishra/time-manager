@@ -11,18 +11,18 @@ import {
   AlignCenter,
   AlignRight,
   AlignJustify,
-  List,
-  ListOrdered,
-  Heading,
+  // List,
+  // ListOrdered,
+  // Heading,
   Table2,
-  StickyNote,
+  // StickyNote,
   ImagePlus,
-  Undo2,
-  Redo2,
-  FileDown,
-  FileText,
-  Sun,
-  Moon,
+  // Undo2,
+  // Redo2,
+  // FileDown,
+  // FileText,
+  // Sun,
+  // Moon,
   Trash2,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -41,7 +41,7 @@ export default function PageView() {
   const params = useParams();
   const title = decodeURIComponent(params.title as string);
   const editorRef = useRef<HTMLDivElement>(null);
-  const [content, setContent] = useState("");
+  const [, setContent] = useState("");
 
   useEffect(() => {
     const key = `page-${title}`;
@@ -122,15 +122,6 @@ export default function PageView() {
     }
   };
 
-  const insertStickyNote = () => {
-    const noteHTML = `
-      <div style="background-color: #fff3cd; color: #856404; padding: 10px; margin: 10px 0; border-left: 5px solid #ffecb5;">
-        📝
-      </div>
-    `;
-    document.execCommand("insertHTML", false, noteHTML);
-    saveContent();
-  };
 
   const [isHighlighted, setIsHighlighted] = useState(false);
 
@@ -157,7 +148,7 @@ export default function PageView() {
     }
   };
   const [trashedPages, setTrashedPages] = useState<any[]>([]);
-  const [showTrash, setShowTrash] = useState(false);
+  // const [showTrash, setShowTrash] = useState(false);
 
   useEffect(() => {
     const storedTrash = localStorage.getItem("trashedPages");

@@ -16,14 +16,19 @@ export default function Search() {
   // Load suggestions from localStorage
   useEffect(() => {
     const stored = localStorage.getItem('recentPages');
+
     if (stored) {
+      type Page = {
+        title: string;
+      };
+      
       try {
-        const parsed = JSON.parse(stored);
-        const titles = parsed.map((p: any) => decodeURIComponent(p.title));
+        const parsed: Page[] = JSON.parse(stored);
+        const titles = parsed.map((p) => decodeURIComponent(p.title));
         setSuggestions(titles);
       } catch (e) {
         console.error('Error parsing recentPages:', e);
-      }
+      }      
     }
   }, []);
 

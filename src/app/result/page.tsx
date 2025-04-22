@@ -6,10 +6,10 @@ import React from "react";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 
-type PageItem = {
-  title: string;
-  date: string;
-};
+// type PageItem = {
+//   title: string;
+//   date: string;
+// };
 
 type RoutineItem = { time: string; activity: string };
 type Routine = Record<string, RoutineItem[]>;

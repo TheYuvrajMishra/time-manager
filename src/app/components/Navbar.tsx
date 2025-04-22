@@ -1,12 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { CiSearch, CiSettings, CiTrash } from "react-icons/ci";
+import { CiSearch, CiSettings } from "react-icons/ci";
 import { MdOutlineHome } from "react-icons/md";
 import { FaInbox } from "react-icons/fa";
 import { GiArtificialHive } from "react-icons/gi";
 import { IoDocumentTextOutline } from "react-icons/io5";
-import { RiArrowDropDownLine } from "react-icons/ri";
+// import { RiArrowDropDownLine } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import { PiDotsThree } from "react-icons/pi";
 import Menu from "@mui/material/Menu";
@@ -21,13 +21,13 @@ export default function Home() {
     setIsSettingsOpen(true);
   };
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  // const open = Boolean(anchorEl);
+  // const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  // };
 
   const router = useRouter();
 

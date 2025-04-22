@@ -26,7 +26,7 @@ export default function HomePage() {
     });
 
     const data = await res.json();
-    let replyText = data.reply || '';
+    const replyText = data.reply || '';
 
     const firstBrace = replyText.indexOf('{');
     const lastBrace = replyText.lastIndexOf('}');

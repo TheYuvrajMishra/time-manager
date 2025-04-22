@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-type PageItem = {
-  title: string;
-  date: string;
-};
+// type PageItem = {
+//   title: string;
+//   date: string;
+// };
 
 export default function NewPage() {
   const router = useRouter();

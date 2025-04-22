@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 
 import React, { useEffect, useState } from "react";
-
+import Image from "next/image";
 type PageItem = {
   title: string;
   date: string;
@@ -94,7 +94,7 @@ export default function HomePage() {
                 >
                   {/* Static image */}
                   <div className="h-32 w-full overflow-hidden z-0 ">
-                    <img
+                    <Image
                       src="/neutral image _project_ themed with a file icon.png"
                       alt="Project preview"
                       className="w-full h-full brightness-75 group-hover:brightness-100 object-cover transition-transform ease duration-100 scale-105 group-hover:scale-100"

@@ -6,9 +6,9 @@ export async function POST(req: Request) {
   const { message, conversationHistory = [] } = await req.json();
 
   // Validate input
-  const historyContext = conversationHistory
-    .map((entry: any) => `User: ${entry.user}\nAssistant: ${entry.bot}`)
-    .join('\n\n');
+  // const historyContext = conversationHistory
+  //   .map((entry: any) => `User: ${entry.user}\nAssistant: ${entry.bot}`)
+  //   .join('\n\n');
 
 
     const formattedPrompt = `
