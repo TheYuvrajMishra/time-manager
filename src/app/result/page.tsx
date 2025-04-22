@@ -238,13 +238,13 @@ export default function ResultPage() {
 
       {/* Download Button */}
       <div className="px-6 py-4 bg-[#101010] border-t border-[#303030] flex justify-end">
-        {/* <button
-          onClick={handleSavePage}
+        <button
+          // onClick={handleSavePage}
           className="flex items-center gap-2 bg-black text-white border border-dashed border-white/30 px-4 py-2 rounded-xl transition-all hover:bg-white/90 hover:text-black hover:border-white/50 shadow-md transform cursor-pointer"
           title="Save To Pages"
         >
           Save To Pages
-        </button> */}
+        </button>
         <button
           onClick={generatePDF}
           className="flex ml-5 items-center gap-2 bg-black text-white border border-dashed border-white/30 px-4 py-2 rounded-xl transition-all hover:bg-white/90 hover:text-black hover:border-white/50 shadow-md transform cursor-pointer"
