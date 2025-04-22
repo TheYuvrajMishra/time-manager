@@ -181,7 +181,13 @@ export default function PageView() {
 
       const stored = localStorage.getItem("recentPages");
       if (stored) {
-        const recent = JSON.parse(stored).filter((p: any) => p.title !== title);
+        type Post = {
+          title: string;
+          id: number;
+          // add more properties as needed
+        };
+        
+        const recent = JSON.parse(stored).filter((p: Post) => p.title !== title);        
         localStorage.setItem("recentPages", JSON.stringify(recent));
       }
       window.location.href = "/Home";

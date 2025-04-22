@@ -5,7 +5,7 @@ export async function POST(req: Request) {
     const { message, conversationHistory = [] } = await req.json();
 
     // Trim conversation history to the last 5 exchanges to avoid context overload
-    const trimmedHistory = conversationHistory.slice(-10);
+    // const trimmedHistory = conversationHistory.slice(-10);
 
     // Create the conversation context with roles for user and assistant
     const messages = [
