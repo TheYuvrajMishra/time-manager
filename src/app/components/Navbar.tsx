@@ -12,7 +12,7 @@ import { PiDotsThree } from "react-icons/pi";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import React from "react";
-import SettingsModal from "@/app/Settings/page"; // adjust this path as needed
+import SettingsModal from "@/app/components/Settings"; // adjust this path as needed
 
 export default function Home() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
