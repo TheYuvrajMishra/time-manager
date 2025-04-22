@@ -31,7 +31,7 @@ export default function NewPage() {
     const updated = existing ? JSON.parse(existing) : [];
   
     // Avoid duplicates
-    const filtered = updated.filter((item: any) => item.title !== title);
+    const filtered = updated.filter((item: { title: string }) => item.title !== title);
     filtered.unshift(newPage);
   
     localStorage.setItem('recentPages', JSON.stringify(filtered));

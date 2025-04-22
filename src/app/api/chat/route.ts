@@ -40,10 +40,10 @@ Below is the conversation history, which will help you understand the user's con
       ]
     },
     // Adding prior conversation history with user and assistant roles
-    ...trimmedHistory.flatMap((entry: any) => [
-      { role: 'user', parts: [{ text: entry.user }] },
-      { role: 'model', parts: [{ text: entry.bot }] }
-    ]),
+    // ...trimmedHistory.flatMap((entry: any) => [
+    //   { role: 'user', parts: [{ text: entry.user }] },
+    //   { role: 'model', parts: [{ text: entry.bot }] }
+    // ]),
     // The current user message
     { role: 'user', parts: [{ text: message }] }
   ];
@@ -63,8 +63,13 @@ Below is the conversation history, which will help you understand the user's con
     const reply = result?.candidates?.[0]?.content?.parts?.[0]?.text || 'No response generated.';
 
     return NextResponse.json({ reply });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Error generating response:', err);
     return NextResponse.json({ error: 'Failed to generate response' }, { status: 500 });
   }
+  
+  // catch (err: any) {
+  //   console.error('Error generating response:', err);
+  //   return NextResponse.json({ error: 'Failed to generate response' }, { status: 500 });
+  // }
 }

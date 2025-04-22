@@ -147,7 +147,14 @@ export default function PageView() {
       saveContent();
     }
   };
-  const [trashedPages, setTrashedPages] = useState<any[]>([]);
+  type TrashedPage = {
+    title: string;
+    content: string;
+    date: string;
+  };
+  
+  const [trashedPages, setTrashedPages] = useState<TrashedPage[]>([]);
+  
   // const [showTrash, setShowTrash] = useState(false);
 
   useEffect(() => {
